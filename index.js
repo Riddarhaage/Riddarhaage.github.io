@@ -66,6 +66,17 @@ canvas.addEventListener("wheel", function (e) {
   drawRect();
 });
 
+// Add touch event listeners for touch-based movement of the rectangle
+canvas.addEventListener("touchstart", function (e) {
+  let touchX = e.touches[0].clientX; // Get the x position of the touch
+  rect.touchOffsetX = touchX - rect.x; // Calculate the offset between the touch position and the rectangle's position
+});
+
+canvas.addEventListener("touchmove", function (e) {
+  let touchX = e.touches[0].clientX; // Get the x position of the touch
+  rect.x = touchX - rect.touchOffsetX; // Update the rectangle's x position based on the touch position and the offset
+});
+
 function animateBall() {
   context.clearRect(ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2); // Clear the previous position of the ball
   ball.x += ball.speedX;
