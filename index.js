@@ -3,6 +3,9 @@ let context = canvas.getContext("2d");
 
 let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent); // Check if the device is a mobile device
 
+var hitBlock = new Audio('blip.mp3');
+var hitPlayer = new Audio('hitPlayer.mp3');
+
 if (isMobile) {
   canvas.width = window.innerWidth; // Set canvas width to window inner width on mobile
   canvas.height = window.innerHeight; // Set canvas height to window inner height on mobile
@@ -22,7 +25,6 @@ let blocks = [
   { x: 60, y: 5, width: 50, height: 20, destroyed: false },
   { x: 115, y: 5, width: 50, height: 20, destroyed: false },
   { x: 170, y: 5, width: 50, height: 20, destroyed: false },
-  /*
   { x: 225, y: 5, width: 50, height: 20, destroyed: false },
   { x: 280, y: 5, width: 50, height: 20, destroyed: false },
   { x: 335, y: 5, width: 50, height: 20, destroyed: false },
@@ -40,8 +42,6 @@ let blocks = [
   { x: 225, y: 55, width: 50, height: 20, destroyed: false },
   { x: 280, y: 55, width: 50, height: 20, destroyed: false },
   { x: 335, y: 55, width: 50, height: 20, destroyed: false },
-  */
-
 ];
 
 let gameOver = false;
@@ -102,6 +102,7 @@ function animateBall() {
   // Check for collision with the rectangle (floor)
   if (ball.y + ball.radius > rect.y && ball.x > rect.x && ball.x < rect.x + rect.width) {
     // Ball collided with the rectangle, bounce off
+    hitPlayer.play();
     ball.speedY *= -1;
   }
 
@@ -117,7 +118,10 @@ function animateBall() {
         // Ball collided with the block, bounce off
         ball.speedY *= -1;
         blocks[i].destroyed = true;
+        hitBlock.play();
+        score();
         checkWin();
+        context.clearRect(0, 0, canvas.width, canvas.height);
       }
     }
   }
@@ -150,6 +154,7 @@ function drawBlocks() {
   blocks.forEach(block => {
     if (!block.destroyed) {
       context.fillRect(block.x, block.y, block.width, block.height);
+      drawRect();
     }
   });
 }
@@ -165,6 +170,17 @@ function checkWin() {
     alert("You win!");
   }
 }
+
+function score() {
+  let score = 0;
+  blocks.forEach(block => {
+    if (block.destroyed) {
+      score += 10;
+    }
+  });
+  return document.getElementById("score").innerHTML = `Score: ${score}`;
+}
+
 
 
 animateBall();
