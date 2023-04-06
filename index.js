@@ -22,6 +22,7 @@ let blocks = [
   { x: 60, y: 5, width: 50, height: 20, destroyed: false },
   { x: 115, y: 5, width: 50, height: 20, destroyed: false },
   { x: 170, y: 5, width: 50, height: 20, destroyed: false },
+  /*
   { x: 225, y: 5, width: 50, height: 20, destroyed: false },
   { x: 280, y: 5, width: 50, height: 20, destroyed: false },
   { x: 335, y: 5, width: 50, height: 20, destroyed: false },
@@ -39,8 +40,7 @@ let blocks = [
   { x: 225, y: 55, width: 50, height: 20, destroyed: false },
   { x: 280, y: 55, width: 50, height: 20, destroyed: false },
   { x: 335, y: 55, width: 50, height: 20, destroyed: false },
-  
-
+  */
 
 ];
 
@@ -117,6 +117,7 @@ function animateBall() {
         // Ball collided with the block, bounce off
         ball.speedY *= -1;
         blocks[i].destroyed = true;
+        checkWin();
       }
     }
   }
@@ -152,6 +153,19 @@ function drawBlocks() {
     }
   });
 }
+
+function checkWin() {
+  let win = true;
+  blocks.forEach(block => {
+    if (!block.destroyed) {
+      win = false;
+    }
+  });
+  if (win) {
+    alert("You win!");
+  }
+}
+
 
 animateBall();
 //hehe
