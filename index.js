@@ -1,8 +1,15 @@
 let canvas = document.getElementById("canvas");
 let context = canvas.getContext("2d");
 
-canvas.width = 400;
-canvas.height = 600;
+let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent); // Check if the device is a mobile device
+
+if (isMobile) {
+  canvas.width = window.innerWidth; // Set canvas width to window inner width on mobile
+  canvas.height = window.innerHeight; // Set canvas height to window inner height on mobile
+} else {
+  canvas.width = 400; // Set canvas width to a fixed value on desktop
+  canvas.height = 600; // Set canvas height to a fixed value on desktop
+}
 
 canvas.style.background = "rgb(125, 125, 125)";
 
