@@ -5,6 +5,9 @@ let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent); // Check i
 
 var hitBlock = new Audio('blip.mp3');
 var hitPlayer = new Audio('hitPlayer.mp3');
+var bgMusic = new Audio('bg_music.mp3');
+bgMusic.loop = true;
+bgMusic.play();
 
 if (isMobile) {
   canvas.width = window.innerWidth; // Set canvas width to window inner width on mobile
