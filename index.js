@@ -30,31 +30,30 @@ canvas.style.background = "rgb(125, 125, 125)";
 let rect = { x: 200, y: 570, width: 100, height: 10}; // Define rect as an object with properties for position and size
 
 let ball = { x: canvas.width / 2, y: canvas.height / 2, radius: 10, speedX: 3, speedY: -3 }; // Define ball as an object with properties for position, size, and speed
-
 let blocks = [
-  { x: 5, y: 5, width: 50, height: 20, destroyed: false },
-  { x: 60, y: 5, width: 50, height: 20, destroyed: false },
-  { x: 115, y: 5, width: 50, height: 20, destroyed: false },
-  { x: 170, y: 5, width: 50, height: 20, destroyed: false },
-  { x: 225, y: 5, width: 50, height: 20, destroyed: false },
-  { x: 280, y: 5, width: 50, height: 20, destroyed: false },
-  { x: 335, y: 5, width: 50, height: 20, destroyed: false },
-  { x: 10, y: 30, width: 50, height: 20, destroyed: false },
-  { x: 65, y: 30, width: 50, height: 20, destroyed: false },
-  { x: 120, y: 30, width: 50, height: 20, destroyed: false },
-  { x: 175, y: 30, width: 50, height: 20, destroyed: false },
-  { x: 230, y: 30, width: 50, height: 20, destroyed: false },
-  { x: 285, y: 30, width: 50, height: 20, destroyed: false },
-  { x: 340, y: 30, width: 50, height: 20, destroyed: false },
-  { x: 5, y: 55, width: 50, height: 20, destroyed: false },
-  { x: 60, y: 55, width: 50, height: 20, destroyed: false },
-  { x: 115, y: 55, width: 50, height: 20, destroyed: false },
-  { x: 170, y: 55, width: 50, height: 20, destroyed: false },
-  { x: 225, y: 55, width: 50, height: 20, destroyed: false },
-  { x: 280, y: 55, width: 50, height: 20, destroyed: false },
-  { x: 335, y: 55, width: 50, height: 20, destroyed: false },
-];
+  { x: 0, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 2, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 3, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 4, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 5, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 6, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: 0, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 2, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 3, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 4, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 5, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 6, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: 0, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 2, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 3, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 4, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 5, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+  { x: canvas.width / 7 * 6, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
 
+];
 let gameOver = false;
 
 drawRect();
@@ -88,11 +87,13 @@ canvas.addEventListener("wheel", function (e) {
 canvas.addEventListener("touchstart", function (e) {
   let touchX = e.touches[0].clientX; // Get the x position of the touch
   rect.touchOffsetX = touchX - rect.x; // Calculate the offset between the touch position and the rectangle's position
+  drawRect();
 });
 
 canvas.addEventListener("touchmove", function (e) {
   let touchX = e.touches[0].clientX; // Get the x position of the touch
   rect.x = touchX - rect.touchOffsetX; // Update the rectangle's x position based on the touch position and the offset
+  drawRect();
 });
 
 function animateBall() {
@@ -162,13 +163,18 @@ function drawBall() {
 
 function drawBlocks() {
   context.fillStyle = "white";
+  context.lineWidth = 2;
+  
   blocks.forEach(block => {
     if (!block.destroyed) {
       context.fillRect(block.x, block.y, block.width, block.height);
-      drawRect();
+      context.strokeStyle = "black"; // Set the stroke color to black for each block
+      context.strokeRect(block.x, block.y, block.width, block.height);
     }
+    drawRect();
   });
 }
+
 
 function checkWin() {
   let win = true;

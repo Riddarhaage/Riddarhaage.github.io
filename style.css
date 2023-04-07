@@ -16,3 +16,7 @@
     background-color: #4CAF50; /* Green */
     color: white;
   }
+
+#canvas{
+    border : 2px solid black;
+  }
