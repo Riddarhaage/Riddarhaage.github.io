@@ -9,6 +9,14 @@ var bgMusic = new Audio('bg_music.mp3');
 bgMusic.loop = true;
 bgMusic.play();
 
+document.getElementById("musicBtn").onclick = function () {
+  if (bgMusic.paused) {
+    bgMusic.play();
+  } else {
+    bgMusic.pause();
+  }
+};
+
 if (isMobile) {
   canvas.width = window.innerWidth; // Set canvas width to window inner width on mobile
   canvas.height = window.innerHeight; // Set canvas height to window inner height on mobile
