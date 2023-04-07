@@ -27,7 +27,7 @@ if (isMobile) {
 
 canvas.style.background = "rgb(125, 125, 125)";
 
-let rect = { x: 200, y: 570, width: 100, height: 10}; // Define rect as an object with properties for position and size
+let rect = { x: canvas.width / 2, y: canvas.height * 0.90, width: canvas.width / 4, height: canvas.height / 60}; // Define rect as an object with properties for position and size
 
 let ball = { x: canvas.width / 2, y: canvas.height / 2, radius: 10, speedX: 3, speedY: -3 }; // Define ball as an object with properties for position, size, and speed
 let blocks = [
@@ -140,6 +140,7 @@ function animateBall() {
 
   drawBall();
   drawBlocks();
+  drawRect();
 
   if (!gameOver) {
     requestAnimationFrame(animateBall);
