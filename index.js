@@ -150,7 +150,10 @@ function animateBall() {
 
 function drawRect() {
   context.fillStyle = "white";
+  context.lineWidth = 2;
+  context.strokeStyle = "black";
   context.fillRect(rect.x, rect.y, rect.width, rect.height);
+  context.strokeRect(rect.x, rect.y, rect.width, rect.height);
 }
 
 function drawBall() {
@@ -159,6 +162,7 @@ function drawBall() {
   context.fillStyle = "white";
   context.fill();
   context.closePath();
+
 }
 
 function drawBlocks() {
