@@ -27,9 +27,12 @@ if (isMobile) {
 
 canvas.style.background = "rgb(125, 125, 125)";
 
-let rect = { x: canvas.width / 2, y: canvas.height * 0.90, width: canvas.width / 4, height: canvas.height / 60}; // Define rect as an object with properties for position and size
-
-let ball = { x: canvas.width / 2, y: canvas.height / 2, radius: canvas.width / 50, speedX: 3, speedY: -3 }; // Define ball as an object with properties for position, size, and speed
+let rect = { x: canvas.width / 2, y: canvas.height * 0.90, width: canvas.width / 5, height: canvas.height / 60}; // Define rect as an object with properties for position and size
+if(isMobile) {
+  var ball = { x: canvas.width / 2, y: canvas.height / 2, radius: canvas.width / 50, speedX: 6, speedY: -6 }; // Define ball as an object with properties for position, size, and speed
+  } else {
+  var ball = { x: canvas.width / 2, y: canvas.height / 2, radius: canvas.width / 50, speedX: 3, speedY: -3 }; // Define ball as an object with properties for position, size, and speed
+  }
 let blocks = [
   { x: 0, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
   { x: canvas.width / 7, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
