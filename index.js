@@ -17,12 +17,6 @@ document.getElementById("musicBtn").onclick = function () {
   }
 };
 
-//place button inside canvas
-var button = document.getElementById("musicBtn");
-button.style.position = "absolute";
-button.style.top = canvas.height * 3.75 + "px";
-button.style.left = "10px";
-
 
 if (isMobile) {
   canvas.width = window.innerWidth; // Set canvas width to window inner width on mobile
@@ -31,6 +25,13 @@ if (isMobile) {
   canvas.width = 400; // Set canvas width to a fixed value on desktop
   canvas.height = 600; // Set canvas height to a fixed value on desktop
 }
+
+//place button inside canvas at the bottom left corner
+var button = document.getElementById("musicBtn");
+button.style.position = "absolute";
+button.style.left = canvas.offsetLeft + "px";
+button.style.top = canvas.height - 35 +  "px";
+
 
 canvas.style.background = "rgb(125, 125, 125)";
 
