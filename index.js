@@ -17,6 +17,13 @@ document.getElementById("musicBtn").onclick = function () {
   }
 };
 
+//place button inside canvas
+var button = document.getElementById("musicBtn");
+button.style.position = "absolute";
+button.style.top = canvas.height * 3.75 + "px";
+button.style.left = "10px";
+
+
 if (isMobile) {
   canvas.width = window.innerWidth; // Set canvas width to window inner width on mobile
   canvas.height = window.innerHeight; // Set canvas height to window inner height on mobile

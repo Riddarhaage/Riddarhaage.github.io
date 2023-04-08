@@ -1,19 +1,19 @@
 #musicBtn {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0);
     color: black;
-    border: 2px solid #4CAF50; /* Green */
+    border: 0px solid #4CAF50; /* Green */
     transition-duration: 0.4s;
     cursor: pointer;
     vertical-align: top;
     /*make the button larger*/
-    width: 80px;
-    height: 80px;
+    width: 0px;
+    height: 0px;
     font-size: medium;
     font-weight: bold;
   }
   
 #musicBtn:hover {
-    background-color: #4CAF50; /* Green */
+    background-color: #4caf4f00; /* Green */
     color: white;
   }
 
