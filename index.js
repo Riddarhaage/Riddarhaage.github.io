@@ -10,6 +10,7 @@ let revealedCount = 0;
 let activeCard = null;
 let awaitingEndOfMove = false;
 let coinSound = new Audio("sound/coin.wav");
+//test
 
 function buildCard(picturesURL) {
 	const element = document.createElement("div");
