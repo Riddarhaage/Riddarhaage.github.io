@@ -1,22 +1,61 @@
-#musicBtn {
-    background-color: rgba(255, 255, 255, 0);
-    color: black;
-    border: 0px solid #4CAF50; /* Green */
-    transition-duration: 0.4s;
-    cursor: pointer;
-    vertical-align: top;
-    /*make the button larger*/
-    width: 0px;
-    height: 0px;
-    font-size: medium;
-    font-weight: bold;
-  }
-  
-#musicBtn:hover {
-    background-color: #4caf4f00; /* Green */
-    color: white;
-  }
+#mainWindow{
+    background: linear-gradient(#fbff0009, #39393973);
+    border-radius: 10px;
+    box-shadow: #000000 0px 0px 20px;
+    min-width: 500px;
+}
+@media all and (min-width: 460px) {
+	.navbar .nav-item .dropdown-menu{ display: none; }
+	.navbar .nav-item:hover .dropdown-menu{ display: block; }
+	.navbar .nav-item .dropdown-menu{ margin-top:0; }
+}
+.cards{
+    height: 350px;
+    width: 490px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    display: grid;
+    grid-template-columns: repeat(7, 70px);
+    padding-top: 150px;
+}
+.card{
+    height: 70px;
+    width: 70px;
+    border-radius: 0%;
+    background-image: url("img/qmark.png");
+    border-radius: 5px;
 
-#canvas{
-    border : 2px solid black;
-  }
+}
+body{
+    height: 100vh;
+    background: linear-gradient(#4b0202ab, #ffc9c9);
+}
+#score{
+    top: 0;
+    left: 0;
+    color: #000000;
+    font-size: 50px;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    font-weight: bolder;
+    background-image: none;
+    border-radius: 5px;
+}
+#timer{
+    color: #000000;
+    font-size: 24px;
+    padding-top: 4px;
+    background-color: #fff;
+    font-weight: bolder;
+    height: 50px;
+    width: 108px;
+    border-radius: 10px;
+    border: #000000 2px solid;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    margin-top: 50px;
+
+}
