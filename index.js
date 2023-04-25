@@ -1,7 +1,7 @@
 const cardsContainer = document.querySelector(".cards");
 const picturesURL = ["img/1.png", "img/2.png", "img/3.png", "img/4.png", "img/5.png", "img/6.png",
-                     "img/7.png", "img/8.png", "img/9.png", "img/10.png", "img/11.png", "img/12.png",
-                     "img/13.png", "img/14.png", "img/15.png", "img/16.png", "img/17.png"];
+	"img/7.png", "img/8.png", "img/9.png", "img/10.png", "img/11.png", "img/12.png",
+	"img/13.png", "img/14.png", "img/15.png", "img/16.png", "img/17.png"];
 const deck = [...picturesURL, ...picturesURL];
 const cardCount = deck.length;
 
@@ -30,9 +30,7 @@ function buildCard(picturesURL) {
 			return;
 		}
 
-		// Reveal this color
-		//set background image
-        element.style.backgroundImage = `url(${picturesURL})`;
+		element.style.backgroundImage = `url(${picturesURL})`;
 
 		if (!activeCard) {
 			activeCard = element;
@@ -49,18 +47,20 @@ function buildCard(picturesURL) {
 			activeCard = null;
 			awaitingEndOfMove = false;
 			revealedCount += 2;
-			if(revealedCount < 10){
-				score.innerHTML ="0" + revealedCount;
+			if (revealedCount < 10) {
+				score.innerHTML = "0" + revealedCount;
 				coinSound.play();
 			}
-			else{
+			else {
 				score.innerHTML = revealedCount;
 				coinSound.play();
 			}
 
 
 			if (revealedCount === cardCount) {
-				alert("You win! Refresh to start again.");
+				clearInterval(timerInterval);
+				const finalTime = timer.innerHTML.slice(2);
+				alert(`You win! Your time was ${finalTime}. Refresh to start again.`);
 			}
 
 			return;
@@ -80,56 +80,56 @@ function buildCard(picturesURL) {
 }
 
 const startButton = document.getElementById("memoryBtn");
-
 let gameStarted = false;
+let timerInterval;
 
 startButton.addEventListener("click", () => {
-    if (gameStarted) {
-        return;
-    }
-    else{
+	if (gameStarted) {
+		return;
+	}
+	else {
 		const score = document.createElement("div");
 		score.classList.add("card");
 		score.setAttribute("id", "score");
 		score.innerHTML = "0" + revealedCount;
 		cardsContainer.appendChild(score);
 
-        gameStarted = true;
-        for (let i = 0; i < cardCount; i++) {
-            const randomIndex = Math.floor(Math.random() * deck.length);
-            const picture = deck[randomIndex];
-            const card = buildCard(picture);
-    
-            deck.splice(randomIndex, 1);
-            cardsContainer.appendChild(card);
-    }  
+		gameStarted = true;
+		for (let i = 0; i < cardCount; i++) {
+			const randomIndex = Math.floor(Math.random() * deck.length);
+			const picture = deck[randomIndex];
+			const card = buildCard(picture);
 
-	//add timer that counts up in seconds and minutes
-	let seconds = 0;
-	let minutes = 0;
-	let timer = document.createElement("div");
-	timer.setAttribute("id", "timer");
-	timer.innerHTML = "&#128341;00:00";
-	document.body.appendChild(timer);
+			deck.splice(randomIndex, 1);
+			cardsContainer.appendChild(card);
+		}
 
-	function presentTime(minutes, seconds){
-		if(seconds < 10){
-			seconds = "0" + seconds;
-		}
-		if(minutes < 10){
-			minutes = "0" + minutes;
-		}
-		return minutes + ":" + seconds;
-	}
+		//add timer that counts up in seconds and minutes
+		let seconds = 0;
+		let minutes = 0;
+		let timer = document.createElement("div");
+		timer.setAttribute("id", "timer");
+		timer.innerHTML = "&#128341;00:00";
+		document.body.appendChild(timer);
 
-	let timerInterval = setInterval(function(){
-		seconds++;
-		if(seconds === 60){
-			minutes++;
-			seconds = 0;
+		function presentTime(minutes, seconds) {
+			if (seconds < 10) {
+				seconds = "0" + seconds;
+			}
+			if (minutes < 10) {
+				minutes = "0" + minutes;
+			}
+			return minutes + ":" + seconds;
 		}
-		timer.innerHTML = "&#128341;" + presentTime(minutes, seconds);
-	}
-	, 1000);
+
+		timerInterval = setInterval(function () {
+			seconds++;
+			if (seconds === 60) {
+				minutes++;
+				seconds = 0;
+			}
+			timer.innerHTML = "&#128341;" + presentTime(minutes, seconds);
+		}
+			, 1000);
 	}
 });
