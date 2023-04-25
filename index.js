@@ -1,222 +1,134 @@
-let canvas = document.getElementById("canvas");
-let context = canvas.getContext("2d");
+const cardsContainer = document.querySelector(".cards");
+const picturesURL = ["img/1.png", "img/2.png", "img/3.png", "img/4.png", "img/5.png", "img/6.png",
+                     "img/7.png", "img/8.png", "img/9.png", "img/10.png", "img/11.png", "img/12.png",
+                     "img/13.png", "img/14.png", "img/15.png", "img/16.png", "img/17.png"];
+const deck = [...picturesURL, ...picturesURL];
+const cardCount = deck.length;
 
-let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent); // Check if the device is a mobile device
+// Game state
+let revealedCount = 0;
+let activeCard = null;
+let awaitingEndOfMove = false;
+let coinSound = new Audio("sound/coin.wav");
 
-var hitBlock = new Audio('blip.mp3');
-var hitPlayer = new Audio('hitPlayer.mp3');
-var bgMusic = new Audio('bg_music.mp3');
-bgMusic.loop = true;
-bgMusic.play();
+function buildCard(picturesURL) {
+	const element = document.createElement("div");
 
-document.getElementById("musicBtn").onclick = function () {
-  if (bgMusic.paused) {
-    bgMusic.play();
-  } else {
-    bgMusic.pause();
-  }
-};
+	element.classList.add("card");
+	element.setAttribute("data-img", picturesURL);
+	element.setAttribute("data-revealed", "false");
+
+	element.addEventListener("click", () => {
+		const revealed = element.getAttribute("data-revealed");
+
+		if (
+			awaitingEndOfMove
+			|| revealed === "true"
+			|| element == activeCard
+		) {
+			return;
+		}
+
+		// Reveal this color
+		//set background image
+        element.style.backgroundImage = `url(${picturesURL})`;
+
+		if (!activeCard) {
+			activeCard = element;
+
+			return;
+		}
+
+		const pictureToMatch = activeCard.getAttribute("data-img");
+
+		if (pictureToMatch === picturesURL) {
+			element.setAttribute("data-revealed", "true");
+			activeCard.setAttribute("data-revealed", "true");
+
+			activeCard = null;
+			awaitingEndOfMove = false;
+			revealedCount += 2;
+			if(revealedCount < 10){
+				score.innerHTML ="0" + revealedCount;
+				coinSound.play();
+			}
+			else{
+				score.innerHTML = revealedCount;
+				coinSound.play();
+			}
 
 
-if (isMobile) {
-  canvas.width = window.innerWidth; // Set canvas width to window inner width on mobile
-  canvas.height = window.innerHeight; // Set canvas height to window inner height on mobile
-} else {
-  canvas.width = 400; // Set canvas width to a fixed value on desktop
-  canvas.height = 600; // Set canvas height to a fixed value on desktop
+			if (revealedCount === cardCount) {
+				alert("You win! Refresh to start again.");
+			}
+
+			return;
+		}
+
+		awaitingEndOfMove = true;
+
+		setTimeout(() => {
+			activeCard.style.backgroundImage = null;
+			element.style.backgroundImage = null;
+
+			awaitingEndOfMove = false;
+			activeCard = null;
+		}, 1000);
+	});
+	return element;
 }
 
-//place button inside canvas at the bottom left corner
-var button = document.getElementById("musicBtn");
-button.style.position = "absolute";
-button.style.left = canvas.offsetLeft + "px";
-button.style.top = canvas.height - 35 +  "px";
+const startButton = document.getElementById("memoryBtn");
 
+let gameStarted = false;
 
-canvas.style.background = "rgb(125, 125, 125)";
+startButton.addEventListener("click", () => {
+    if (gameStarted) {
+        return;
+    }
+    else{
+		const score = document.createElement("div");
+		score.classList.add("card");
+		score.setAttribute("id", "score");
+		score.innerHTML = "0" + revealedCount;
+		cardsContainer.appendChild(score);
 
-let rect = { x: canvas.width / 2, y: canvas.height * 0.90, width: canvas.width / 5, height: canvas.height / 60}; // Define rect as an object with properties for position and size
-if(isMobile) {
-  var ball = { x: canvas.width / 2, y: canvas.height / 2, radius: canvas.width / 50, speedX: 6, speedY: -6 }; // Define ball as an object with properties for position, size, and speed
-  } else {
-  var ball = { x: canvas.width / 2, y: canvas.height / 2, radius: canvas.width / 50, speedX: 3, speedY: -3 }; // Define ball as an object with properties for position, size, and speed
-  }
-let blocks = [
-  { x: 0, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 2, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 3, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 4, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 5, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 6, y: 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: 0, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 2, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 3, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 4, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 5, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 6, y: canvas.height / 25 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: 0, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 2, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 3, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 4, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 5, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
-  { x: canvas.width / 7 * 6, y: canvas.height / 25 * 2 + 5, width: canvas.width / 7, height: canvas.height / 25, destroyed: false },
+        gameStarted = true;
+        for (let i = 0; i < cardCount; i++) {
+            const randomIndex = Math.floor(Math.random() * deck.length);
+            const picture = deck[randomIndex];
+            const card = buildCard(picture);
+    
+            deck.splice(randomIndex, 1);
+            cardsContainer.appendChild(card);
+    }  
 
-];
-let gameOver = false;
+	//add timer that counts up in seconds and minutes
+	let seconds = 0;
+	let minutes = 0;
+	let timer = document.createElement("div");
+	timer.setAttribute("id", "timer");
+	timer.innerHTML = "&#128341;00:00";
+	document.body.appendChild(timer);
 
-drawRect();
-drawBall();
+	function presentTime(minutes, seconds){
+		if(seconds < 10){
+			seconds = "0" + seconds;
+		}
+		if(minutes < 10){
+			minutes = "0" + minutes;
+		}
+		return minutes + ":" + seconds;
+	}
 
-canvas.addEventListener("wheel", function (e) {
-  // Clear the canvas
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Update the x position of the rectangle based on wheel scroll
-  if (e.deltaY > 0) {
-    //scroll down
-    rect.x += 20;
-  } else {
-    //scroll up
-    rect.x -= 20;
-  }
-
-  // Check for collision with left and right canvas borders
-  if (rect.x < 0) {
-    rect.x = 0; // Snap rectangle to left canvas border
-  } else if (rect.x + rect.width > canvas.width) {
-    rect.x = canvas.width - rect.width; // Snap rectangle to right canvas border
-  }
-
-  // Draw the updated rectangle
-  drawRect();
+	let timerInterval = setInterval(function(){
+		seconds++;
+		if(seconds === 60){
+			minutes++;
+			seconds = 0;
+		}
+		timer.innerHTML = "&#128341;" + presentTime(minutes, seconds);
+	}
+	, 1000);
+	}
 });
-
-// Add touch event listeners for touch-based movement of the rectangle
-canvas.addEventListener("touchstart", function (e) {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  let touchX = e.touches[0].clientX; // Get the x position of the touch
-  rect.touchOffsetX = touchX - rect.x; // Calculate the offset between the touch position and the rectangle's position
-  drawRect();
-});
-
-canvas.addEventListener("touchmove", function (e) {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  let touchX = e.touches[0].clientX; // Get the x position of the touch
-  rect.x = touchX - rect.touchOffsetX; // Update the rectangle's x position based on the touch position and the offset
-  drawRect();
-});
-
-function animateBall() {
-  context.clearRect(ball.x - ball.radius, ball.y - ball.radius, ball.radius * 2, ball.radius * 2); // Clear the previous position of the ball
-  ball.x += ball.speedX;
-  ball.y += ball.speedY;
-
-  // Check for collision with left and right canvas borders
-  if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
-    ball.speedX *= -1; // Reverse the horizontal speed to make the ball bounce
-  }
-
-  // Check for collision with top canvas border
-  if (ball.y - ball.radius < 0) {
-    ball.speedY *= -1; // Reverse the vertical speed to make the ball bounce
-  }
-
-  // Check for collision with the rectangle (floor)
-  if (ball.y + ball.radius > rect.y && ball.x > rect.x && ball.x < rect.x + rect.width) {
-    // Ball collided with the rectangle, bounce off
-    hitPlayer.play();
-    ball.speedY *= -1;
-  }
-
-  // Check if ball goes beyond the bottom of the canvas
-  if (ball.y + ball.radius > canvas.height) {
-    // Ball went beyond the bottom of the canvas, trigger game over
-    gameOver = true;
-  }
-  // Check for collision with blocks
-  for (let i = 0; i < blocks.length; i++) {
-    if(!blocks[i].destroyed) {
-      if (ball.x + ball.radius > blocks[i].x && ball.x - ball.radius < blocks[i].x + blocks[i].width && ball.y + ball.radius > blocks[i].y && ball.y - ball.radius < blocks[i].y + blocks[i].height) {
-        // Ball collided with the block, bounce off
-        ball.speedY *= -1;
-        blocks[i].destroyed = true;
-        hitBlock.play();
-        score();
-        checkWin();
-        context.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
-  }
-
-  drawBall();
-  drawBlocks();
-  drawRect();
-
-  if (!gameOver) {
-    requestAnimationFrame(animateBall);
-  } else {
-    alert("Game over");
-  }
-}
-
-function drawRect() {
-  context.fillStyle = "white";
-  context.lineWidth = 2;
-  context.strokeStyle = "black";
-  context.fillRect(rect.x, rect.y, rect.width, rect.height);
-  context.strokeRect(rect.x, rect.y, rect.width, rect.height);
-}
-
-function drawBall() {
-  context.beginPath();
-  context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
-  context.fillStyle = "white";
-  context.fill();
-  context.closePath();
-
-}
-
-function drawBlocks() {
-  context.fillStyle = "white";
-  context.lineWidth = 2;
-  
-  blocks.forEach(block => {
-    if (!block.destroyed) {
-      context.fillRect(block.x, block.y, block.width, block.height);
-      context.strokeStyle = "black"; // Set the stroke color to black for each block
-      context.strokeRect(block.x, block.y, block.width, block.height);
-    }
-    drawRect();
-  });
-}
-
-
-function checkWin() {
-  let win = true;
-  blocks.forEach(block => {
-    if (!block.destroyed) {
-      win = false;
-    }
-  });
-  if (win) {
-    alert("You win!");
-  }
-}
-
-function score() {
-  let score = 0;
-  blocks.forEach(block => {
-    if (block.destroyed) {
-      score += 10;
-    }
-  });
-  return document.getElementById("score").innerHTML = `Score: ${score}`;
-}
-
-
-
-animateBall();
-//hehe
