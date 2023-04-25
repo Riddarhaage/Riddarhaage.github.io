@@ -1,9 +1,3 @@
-#mainWindow{
-    background: linear-gradient(#fbff0009, #39393973);
-    border-radius: 10px;
-    box-shadow: #000000 0px 0px 20px;
-    min-width: 500px;
-}
 @media all and (min-width: 460px) {
 	.navbar .nav-item .dropdown-menu{ display: none; }
 	.navbar .nav-item:hover .dropdown-menu{ display: block; }
