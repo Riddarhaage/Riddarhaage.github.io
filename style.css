@@ -9,13 +9,13 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%, 0%);
+    /*använd grid med template som skapar 7 kolumner och 5 rader 70px*70px*/
     display: grid;
     grid-template-columns: repeat(7, 70px);
+    grid-template-rows: repeat(5, 70px);
     padding-top: 60px;
 }
 .card{
-    height: 70px;
-    width: 70px;
     background-image: url("img/qmark.png");
     border-radius: 5px;
 
